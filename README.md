@@ -701,7 +701,71 @@ You will now explore the Liberty server package to get a better understanding ho
 
 Let’s do a short excurse about Liberty dynamic updates. You will use Visual Studio Code to perform some minor configuration changes. For this part of the lab, you could instead also use a simple text editor like vi or gedit instead. 
 
-Open Visual Studio Code.
+1. Open Visual Studio Code.
+
+        cd ~/Student/ops/test
+        code .
+
+    <kbd>![image069](./images/media/image069.png)</kbd>
+
+2. Visual Studio Code opens. Click on **Yes**, if you are asked to trust the author.
+
+    <kbd>![image070](./images/media/image070.png)</kbd>
+
+3. In Visual Studio Code, open a terminal window
+
+    <kbd>![image071](./images/media/image071.png)</kbd>
+
+4. In the terminal, use the tail command to display the Liberty message log.
+
+        tail -f wlp/usr/servers/defaultServer/logs/messages.log
+
+    <kbd>![image072](./images/media/image072.png)</kbd>
+
+5. Wait until the web application has been initialized
+
+    <kbd>![image073](./images/media/image073.png)</kbd>
+
+6. In Visual Studio Code, navigate to **wlp > usr > servers > defaultServer** and open the file **server.xml**.
+
+    <kbd>![image074](./images/media/image074.png)</kbd>
+
+7. In the file server.xml, change the httpPort setting from port 9080 to port 9081
+
+    <kbd>![image075](./images/media/image075.png)</kbd>
+
+    You can see in the terminal that the change is picked up and Liberty listens now on port 9081.
+
+    <kbd>![image076](./images/media/image076.png)</kbd>
+
+8. Change the webApplication contextRoot setting from **“/simpleweb”** to **“/mysimpleweb”**.
+
+    <kbd>![image077](./images/media/image077.png)</kbd>
+
+    You can see in the log that the change is picked up.
+
+    <kbd>![image078](./images/media/image078.png)</kbd>
+
+9. Switch to the browser and access the application via URL **localhost:9081/mysimpleweb/helloWorld**.
+
+    <kbd>![image079](./images/media/image079.png)</kbd>
+
+    As you have seen, you can change the Liberty configuration without having to restart the server. 
+    You will explore this further later in the lab when you dynamically update the logging for example.
+    Now let's stop the server.
+
+10. In the terminal, press **CTRL+C** to stop the tail command. 
+
+11. Stop the Liberty instance by executing in the terminal the command:
+
+        wlp/bin/server stop defaultServer
+
+    <kbd>![image080](./images/media/image080.png)</kbd>
+
+
+### 6.4.2 Create Liberty configuration snippets.
+
+
 
 
 
