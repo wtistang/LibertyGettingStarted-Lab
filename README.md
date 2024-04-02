@@ -699,6 +699,10 @@ You will now explore the Liberty server package to get a better understanding ho
 
 ### 6.4.1.2 Liberty dynamic updates
 
+Let’s do a short excurse about Liberty dynamic updates. You will use Visual Studio Code to perform some minor configuration changes. For this part of the lab, you could instead also use a simple text editor like vi or gedit instead. 
+
+Open Visual Studio Code.
+
 
 
 <br>    
