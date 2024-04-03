@@ -1789,65 +1789,108 @@ The Liberty AdminCenter can be used to monitor the status of the Liberty server.
 
     <kbd>![image174](./images/media/image174.png)</kbd>
 
-    You can see a warning that remote file access is not configured. You can ignore that as you will not configure Liberty via AdminCenter. But you could click on the link to see the configuration in design and source view.
+    You can see a warning that remote file access is not configured. You can ignore that as you will not configure Liberty via AdminCenter. <br>
+    But you could click on the link to see the configuration in design and source view.
+
+12. Select to log out as admin.
+
+    <kbd>![image175](./images/media/image175.png)</kbd>
+
+13. Log in as user **reader** with password **Liberty4Readers**.
+
+    <kbd>![image176](./images/media/image176.png)</kbd>
+
+14. Click on **Explore**, then select the tab **Applications**. <br>
+    Try to click on the twisty next to the **simpleweb** application and you can see that you are not auithorized to start or stop an application.
+
+    <kbd>![image177](./images/media/image177.png)</kbd>
+
+15. Select to log out as reader.
+
+    <kbd>![image178](./images/media/image178.png)</kbd>
+
+16. In the terminal window, press **CRTL+C** to stop the tail command. 
+
+17. Stop the Liberty server.
+
+        wlp/bin/server stop myServer
+
+
+### 6.4.3.11 Customizing Liberty JVM Options
+
+As you have seen in the Admin Center, the Liberty value for max heap is quite large which indicates that a limit has not been defined yet. This will be done as part of this section by defining Liberty JVM options. 
+
+The generic JVM arguments are used to configure and adjust how the JVM executes. Liberty is pre-configured with minimal settings defined. Custom generic JVM arguments such as heap settings for a Liberty server can be defined in the jvm.options file.
+
+1. Create a jvm.options file with definitions for min and max heap by executing the following command:
+
+        echo '
+        -Xms25m
+        -Xmx500m
+        ' > wlp_usr/servers/myServer/jvm.options
+        cat wlp_usr/servers/myServer/jvm.options
+
+    <kbd>![image179](./images/media/image179.png)</kbd>
+
+2. Start the server with the updated JVM options.
+
+        wlp/bin/server start myServer
+
+3. Access the Liberty Admin Center again via URL **https://localhost:9443/adminCenter**. <br>
+    Log in as user reader with password Liberty4Readers.
+
+    <kbd>![image176](./images/media/image176.png)</kbd>
+
+4. Click on **Explore**, then select **Monitor**. <br>
+    Take a look at the dashboard and you can see, that the Used Heap Memory Max is now 500 MB as defined in jvm.options.
+
+    <kbd>![image180](./images/media/image180.png)</kbd>
 
 <br>    
 
+5. Log out from admin center.
+
+6. Stop the Liberty server using the following command:
+
+        wlp/bin/server stop myServer
+
+For additional information around the Liberty Admin Center, take a look at:
+**https://www.ibm.com/docs/en/was-liberty/base?topic=center-setting-up-admin**
 
 
-### 10. Cleanup
+### 6.4.3.12 Recap
 
-1.  **`Stop`** and **`remove`** the container. Then check that the container has been removed, by using the “**docker ps -a”** command
+11.	Recap
 
-        docker stop modresorts
-        
-        docker rm modresorts
-        
-        docker ps -a | grep modresorts
+Let’s recap what you did in this part of the lab: 
+- You installed a Liberty server using the Liberty kernel image.
+- You used Liberty environment variables to separate the Liberty configuration from the binaries.
+- You created a Liberty server instance and installed missing features.
+- You deployed a simple web application via dropins and via server.xml.
+- You configured logging via server.xml and server.env.
+- You changed the Liberty heap size via jvm.options.
+- You used the REST API to see the Liberty configuration.
+- You used Liberty Admin Center to see monitoring data and administer Liberty apps.
+ 
 
-2.  **`Remove`** the modresorts container image. Then use the “**docker images**” command to verify the image has been removed
+### 7 Lab Cleanup
 
-        docker rmi modresorts:1.0
+1. Once you are done, make sure that Liberty and Visual Studio Code is not running.
 
-        docker images | grep modresorts
+2. Delete the Student folder via command:
 
-3.  Finally **`remove`** the **`Student's`** folder and the downloaded assets.
+    rm -rf ~/Student
 
-        cd ~
-        rm -rf ~/Student
-        rm ~/Downloads/*
 
-4. Stop Transformation Advisor
-
-        cd /home/techzone/transformation-advisor-local-3.9.0
-        scripts/stopTransformationAdvisor.sh
-
-5. Close the browser and all terminal windows
+3. Close the browser and all terminal windows
 
 
 
 ## Summary
 
-In this lab, you learned how to evaluate the existing Java application
-using IBM Cloud Transformation Advisor.
-
-You learned how to use Transformation Advisors generated deployment
-accelerators from the migration bundle to build and run an application
-in Open Liberty in stand-alone mode on a VM and in containers.
-
-As a part of IBM Application Modernization solutions, the Transformation
-Advisor tool provides a recommendation for the right-fit IBM WebSphere
-Application Server edition and offers advice, best practices, and
-potential solutions to assess the ease of moving apps to Liberty or to
-WAS container, or to newer versions of WebSphere traditional.
-
-Transformation Advisor accelerates application migrating to Liberty and
-containers and helps minimize errors and risks and reduce time to
-market.
-
+In this lab, you learned how to develop a simple application and how to install and configure Liberty.
 <br/>
 
 **Congratulations!**
 
-**You have successfully completed the lab “Exploring IBM Transformation
-Advisor data collection, app assessments, and deployment accelerators”**
+**You have successfully completed the lab "Liberty Getting Started"**
