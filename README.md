@@ -1130,13 +1130,670 @@ Comments:
 - Instead of using the Liberty Tools configuration assistant in Visual Studio Code, you could also use the product documentation and copy & paste to create Liberty configuration snippets. 
 - You could also use the IBM migration tools to transform an existing configuration for WebSphere Traditional and other runtimes into a Liberty configuration.
 
-### 6.4.3 Operations
+### 6.4.3 Install and configure Liberty from the command line.
+
+Now let’s install and configure Liberty from an administrator point of view. 
+
+A traditional administrator typically downloads the application server binaries from the IBM pages and uses a regular editor instead of an IDE like Visual Studio to configure Liberty. To download the latest version of WebSphere Liberty, the administrator can use the IBM support page https://www.ibm.com/support/pages/recommended-updates-websphere-application-server
+
+### 6.4.3.1	Install Liberty from scratch
+
+Best practice is to create a minimal installation by using the Liberty kernel image and install only the required features on top of it. The latest WebSphere Liberty kernel image could be downloaded from the IBM support page. For simplicity, we will use the ILAN package which is available as zip file at: https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp/24.0.0.1/wlp-kernel-24.0.0.1.zip
+
+1. Open a terminal window.
+
+2. Create a directory to store the Liberty package. 
+
+        mkdir ~/Student/ops/software
+    
+    <kbd>![image113](./images/media/image113.png)</kbd>
+    
+3. Download and store the Liberty kernel image. 
+
+        wget https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp/24.0.0.1/wlp-kernel-24.0.0.1.zip -P ~/Student/ops/software
+    
+    <kbd>![image114](./images/media/image114.png)</kbd>
+
+4. Use **ls** to see that the kernel image is less than 17 MB in size. The overall disk footprint will be larger depending on the required Liberty features.
+
+    <kbd>![image115](./images/media/image115.png)</kbd>
+
+5. Create a directory for the integration environment. This will be used for the Liberty installation.
+
+        mkdir ~/Student/ops/int
+        cd ~/Student/ops/int
+
+    <kbd>![image116](./images/media/image116.png)</kbd>
+
+6. Use the unzip command to extract the image.
+
+        unzip ../software/wlp-kernel-24.0.0.1.zip
+
+    <kbd>![image117](./images/media/image117.png)</kbd>
+
+<table>
+    <tbody>
+    <tr class="odd">
+    <td><kbd><img src="./images/media/info.png" alt="sign-info" /></kbd></td>
+    <td>
+    <p>On the IBM support page, you can find next to the convenience packages like the Liberty kernel package also Liberty archives for Liberty Core, Liberty Base or Liberty ND. To install such an archive, you would use a command like: <br>
+    <strong>"java -jar ../wlp-base-all-24.0.0.1.jar --acceptLicense ."</strong></p></td>
+    </tr>
+    </tbody>
+    </table>
+
+7. Get the Liberty version by running the following command:
+
+        wlp/bin/productInfo version
+
+    <kbd>![image118](./images/media/image118.png)</kbd>
+
+    As you can see, this is an ILAN package which can be used for evaluation as well as for production. 
+
+8. Get the list of Liberty features that are part of the installation:
+
+        wlp/bin/productInfo featureInfo
+
+    <kbd>![image119](./images/media/image119.png)</kbd>
+
+    As you can see, no feature is included in the kernel image.
+
+Now that Liberty has been installed, the next step is to create a Liberty server instance.
+
+<table>
+    <tbody>
+    <tr class="odd">
+    <td><kbd><img src="./images/media/info.png" alt="sign-info" /></kbd></td>
+    <td>
+    <p>As you have seen, the installation of Liberty is basically an unzip. <br>
+    If you want to update Liberty later on, you can either apply a jar file or simply replace the binaries.</p></td>
+    </tr>
+    </tbody>
+    </table>
 
 
 
+### 6.4.3.2	Introducing Liberty Environment Variable Configuration
 
+You can customize the Liberty environment using certain specific variables to support the placement of product binaries and shared resources. The Liberty environment variables are specified using server.env file. You can use server.env file at the installation and server levels to specify environment variables such as JAVA_HOME, WLP_USER_DIR and WLP_OUTPUT_DIR.
+Here some of the Liberty specific variables can be used to customize the Liberty environment:
+(see also https://www.ibm.com/docs/en/was-liberty/nd?topic=liberty-customizing-environment) 
+
+- **${wlp.install.dir}** <br>
+    This configuration variable has an inferred location. The installation directory is always set to the parent of the directory containing the launch script or the parent of the /lib directory containing the target jar files.
+- **JVM_ARGS** <br>
+    This environment variable can be used to specify a list of command-line options, such as system properties or -X parameters, that are passed to the JVM when the server starts. Any values that contain spaces must be enclosed in quotes.
+- **WLP_USER_DIR** <br>
+    This environment variable can be used to specify an alternative location for **wlp.user.dir**. This variable must be an absolute path. If this variable is specified, the runtime environment looks for shared resources and server definitions in the specified directory.  <br>
+    **WLP_USER_DIR** can be specified only in the **${wlp.install.dir}/etc/server.env** file because the purpose of this variable is to specify where the remaining configuration is located. After the remaining configuration is found and merged, no further configuration in a different location is expected, or supported
+-  **WLP_OUTPUT_DIR** <br>
+    This environment variable can be used to specify an alternative location for server generated output such as logs, the workarea directory, and generated files. Files in the logs directory can include console.log, messages.log, and any generated FFDC files. Generated files can include server dumps that are created with the server dump or server javadump command. This variable must be an absolute path.
+
+
+### 6.4.3.3 Create a Liberty server instance
+
+The **Liberty server** command supports actions for starting, stopping, creating, packaging, and dumping a Liberty server. The **server create** command creates a new Liberty server with the name specified. Additional detail on the server command can be found here:
+https://www.ibm.com/docs/en/was-liberty/base?topic=line-server-command-options 
+
+The **server create** command creates by default the user directory in a sub-directory of the **${wlp.install.dir}** directory. In production, it is recommended to store the Liberty configuration in a separate directory. This can be done by setting the **WLP_USER_DIR** environment variable.
+
+1. The etc directory as well as the server.env file are not created as part of the installation. <br>
+    Use the following commands to set the variable **WLP_USER_DIR** to **"/home/techzone/Student/ops/int/wlp_usr"** in the server.env on runtime level. <br>
+    (Keep in mind that the path in server.env must be absolute, ~/Student for example is not supported):
+
+        mkdir ~/Student/ops/int/wlp/etc
+        echo "WLP_USER_DIR=/home/techzone/Student/ops/int/wlp_usr" > ~/Student/ops/int/wlp/etc/server.env
+        cat ~/Student/ops/int/wlp/etc/server.env
+
+    <kbd>![image120](./images/media/image120.png)</kbd>
+
+2. Run the following commands to create a new server named **"myServer"**:
+
+        wlp/bin/server create myServer
+
+    <kbd>![image121](./images/media/image121.png)</kbd>
+
+3. The new server is created in the following directory: wlp_usr/servers/myServer
+    Run the following command to verify the name and the path of the server instance:
+
+        wlp/bin/server list
+
+    <kbd>![image122](./images/media/image122.png)</kbd>
+
+4. Run the following command to list the files and directories that have been created for myServer:
+
+        ls -lrt wlp_usr/servers/myServer
+
+    <kbd>![image123](./images/media/image123.png)</kbd>
+
+5. Replace the generated Liberty configuration with the configuration that you stored in the assets directory.
+
+        cp ~/Student/assets/server.* wlp_usr/servers/myServer
+        ls -lrt wlp_usr/servers/myServer
+
+    <kbd>![image124](./images/media/image124.png)</kbd>
+
+<table>
+    <tbody>
+    <tr class="odd">
+    <td><kbd><img src="./images/media/info.png" alt="sign-info" /></kbd></td>
+    <td>
+    <p>In the Liberty setup, you now have a <strong>server.env</strong> file on two levels: <br>
+        - on <strong>runtime level</strong> at <strong>${wlp.install.dir}/etc/server.env</strong> and <br>
+        - on <strong>server level</strong> at <strong>${server.config.dir}/server.env</strong>. <br>
+        If both files are present, the contents of the two files are merged; values in the server-level file take precedence over values in the runtime-level file.
+    </p></td>
+    </tr>
+    </tbody>
+    </table>
+
+6. Verify that the pre-defined HTTP settings fit to your environment:
+
+        cat wlp_usr/servers/myServer/server.xml | grep http
+
+    <kbd>![image125](./images/media/image125.png)</kbd>
+
+<table>
+    <tbody>
+    <tr class="odd">
+    <td><kbd><img src="./images/media/info.png" alt="sign-info" /></kbd></td>
+    <td>
+    <p>If you want to change those port values, you could define them in the <strong>server.env</strong> file or <strong>bootstrap.properties</strong> file for example. <br> Alternatively you could define the related variable on the operating system level. 
+    </p></td>
+    </tr>
+    </tbody>
+</table>
+
+
+### 6.4.3.4	Install required features
+
+You installed the Liberty kernel package which does not contain any features. The next step is to install the required features. Instead of looking into the Liberty configuration to determine which features are required, you can let Liberty inspect which features are missing. This can be done using the featureUtility and specifying the server you are looking for. The command by default will download the required features from the online repository. In an air-gapped environment, you could download the feature repository from the IBM support page and then specify in the featureUtility command to use a local repository. 
+
+1. To download and install the required features, use the following command:
+
+        wlp/bin/featureUtility installServerFeatures myServer
+
+    <kbd>![image126](./images/media/image126.png)</kbd>
+
+    As you can see, the command detected that the features for servlet-6.0 and transportSecurity-1.0 were missing. It also downloads the feature ssl-1.0 as transportSecurity-1.0 depends on it.
+
+2. Verify that the Liberty features have been installed by using the following command:
+
+        wlp/bin/productInfo featureInfo
+
+    <kbd>![image127](./images/media/image127.png)</kbd>
+
+### 6.4.3.5	Use your own keystore
+
+If you do not create a keystore but enable SSL, Liberty will create a keystore with a random password. Now, you will create your own keystore with a password of choice. 
+
+1. Run the following command to create a keystore
+
+        wlp/bin/securityUtility createSSLCertificate --server=myServer --password=mySecret
+
+    <kbd>![image128](./images/media/image128.png)</kbd>
+
+    As you can see, the command uses the hostname and server name as subjectDN and encodes the password using xor. The command also allows to use aes encoding or encryption, see https://www.ibm.com/docs/en/was-liberty/base?topic=applications-securityutility-command.
+
+
+2. Our server template has already configured SSL and uses a variable to specify the keystore password. Use the following commands to review what has been configured in the server.xml file:
+
+        cat wlp_usr/servers/myServer/server.xml | grep trans
+        cat wlp_usr/servers/myServer/server.xml | grep keystore
+
+    <kbd>![image129](./images/media/image129.png)</kbd>
+
+3. The keystore password has been configured in the server.env file. Use the following command for review the settings:
+
+        cat wlp_usr/servers/myServer/server.env;echo
+
+    <kbd>![image130](./images/media/image130.png)</kbd>
+
+    As expected, the password used for the keystore does not match to the one in server.env and must be updated. 
+    
+4. Best practice is to store the password encoded or encrypted. In this case, you will use encoding via aes and store the password in the server.env file. To generate the encoded password, you can use the securityUtility encode command. Use the following command to update the server.env file with the encoded keystore password of “mySecret”, then review the result:
+
+        echo "keystore_password=$(wlp/bin/securityUtility encode --encoding=aes mySecret)" > wlp_usr/servers/myServer/server.env
+        cat wlp_usr/servers/myServer/server.env
+
+    <kbd>![image131](./images/media/image131.png)</kbd>
+
+
+<table>
+    <tbody>
+    <tr class="odd">
+    <td><kbd><img src="./images/media/info.png" alt="sign-info" /></kbd></td>
+    <td>
+    <p>The encoded keystore password is not unique, so you might have a different password as in the screenshot above. <br> 
+        But as long as you use the same password to be encoded, all of the different resulting strings are valid. 
+    </p></td>
+    </tr>
+    </tbody>
+</table>
+
+### 6.4.3.6	Verify that the server configuration works:
+
+1. Start the server via the following command:
+
+        wlp/bin/server start myServer
+        tail -f wlp_usr/servers/myServer/logs/messages.log
+
+    <kbd>![image132](./images/media/image132.png)</kbd>
+
+    As you can see, the Liberty server is running and listens on port **9080** and **9443**. You can also see that it complains about the **missing include file application-config.xml**. You will fix this later.
+
+2. Verify that the server is accessible via HTTPs. Switch to the browser and access the web application via the URL **https://localhost:9443**. 
+    As before, you will get a warning that your connection is not secure. Click on **Advanced**, scroll down and click on **"Accept the Risk and Continue"**. Then you should be able to access the application.
+
+    <kbd>![image133](./images/media/image133.png)</kbd>
+
+3. Switch back to the terminal window and press **CTRL+C** in the terminal window to stop the tail command.
+
+4. Stop the server via the following command:
+
+        wlp/bin/server stop myServer
+
+### 6.4.3.7	Deploying a sample application to Liberty
+
+In the first part of this lab, you used the Liberty Tools to develop an application and configure Liberty. The application got deployed via maven under the cover. Then you used the Liberty server package which already included the deployed application. In this section of the lab, you will deploy an application to Liberty using two different techniques.
+
+First, you will simply copy the application WAR module into the Liberty **"dropins"** directory. The dropins directory is monitored by Liberty. As deployable units (WAR, EAR, JAR) are added to the directory, Liberty automatically deploys and starts the application on the Liberty server. 
+The dropins directory can be used for applications that do not require extra configuration like security role mapping. As the deployable units are removed from the dropins folder, the applications are stopped and removed from the running Liberty server.
+Now, give it a try.
+
+1. In the terminal window start the server and use the tail -f command to view the messages.log file.
+
+        wlp/bin/server start myServer
+        tail -f wlp_usr/servers/myServer/logs/messages.log
+
+2. **Right-click** on **Terminal** and select **New Window** to open a second terminal window.
+
+    <kbd>![image134](./images/media/image134.png)</kbd>
+
+3. In the new Terminal window, navigate to the int directory:
+
+        cd ~/Student/ops/int/
+
+4. Copy the web application into the dropins directory.
+
+        cp ~/Student/assets/simpleweb.war wlp_usr/servers/myServer/dropins
+
+    <kbd>![image135](./images/media/image135.png)</kbd>
+
+5. Switch to the terminal window where tail command is running. You can see messages that the application deployment has taken place, the application simpleweb application has been started and is available at **http://rhel9-base.gym..lan:9080/simpleweb/**.  <br>
+    Be aware that Liberty defined the context root based on the name of the WAR file as **"/simpleweb"**.
+
+    <kbd>![image136](./images/media/image136.png)</kbd>
+
+
+6. Verify that the application is accessible by opening a browser at: **http://localhost:9080/simpleweb/helloWorld**
+
+    <kbd>![image137](./images/media/image137.png)</kbd>
+
+7. In the terminal window where tail is running, you can see that the application has been accessed.
+
+    <kbd>![image138](./images/media/image138.png)</kbd>
+
+8. Switch back to the terminal where you entered the copy command and remove the deployed application from the dropins directory using the following command:
+
+        rm wlp_usr/servers/myServer/dropins/simpleweb.war
+
+9. Switch back to the terminal window where tail is running. You can see that the application has been removed.
+
+    <kbd>![image139](./images/media/image139.png)</kbd>
+
+
+While the dropins directory can be used for applications that do not require extra configuration, deploying the application by adding it to the Liberty server configuration provides the freedom to configure the Liberty server based on the application configuration requirements. 
+Now you will deploy the simpleweb application by adding it to the Liberty server configuration. <br>
+The default place for applications is: **${server.config.dir}/apps**.
+
+10. Switch back to the terminal window not running tail. Copy the application WAR file into the apps directory by using the following command:
+
+        cp ~/Student/assets/simpleweb.war wlp_usr/servers/myServer/apps
+        ls -lrt wlp_usr/servers/myServer/apps/*.war
+
+    <kbd>![image140](./images/media/image140.png)</kbd>
+
+11. To define the application in the Liberty configuration file, take a look at the application configuration that has been provided as snippet.
+
+        cat ~/Student/assets/application-config.xml
+
+    <kbd>![image141](./images/media/image141.png)</kbd>
+
+    As you can see, a different context root has been defined.
+
+12. You will add the webApplication element to the Liberty configuration by using the **include** concept. Review that the include element and the properties that have already been defined in the server.xml file.
+
+        cat wlp_usr/servers/myServer/server.xml | grep include
+
+    <kbd>![image142](./images/media/image142.png)</kbd>
+
+13. Copy the application-config.xml into the server directory.
+
+        cp ~/Student/assets/application-config.xml wlp_usr/servers/myServer
+        ls -lrt wlp_usr/servers/myServer
+
+    <kbd>![image143](./images/media/image143.png)</kbd>
+
+14. Switch back to the terminal window running tail. You can see that the application **simpleweb** gets deployed, this time with the context root **mysimpleweb**. 
+
+    <kbd>![image144](./images/media/image144.png)</kbd>
+
+
+15. Finally test the application in the browser via URL **http://localhost:9080/mysimpleweb/helloWorld**. 
+
+    <kbd>![image145](./images/media/image145.png)</kbd>
+
+
+**You have successfully deployed the web application into Liberty, first via dropins directory, then by adding it to the server.xml file via include.**
+
+
+### 6.4.3.8	Change logging and tracing by using ConfigDropins
+
+Right now, you used the **include** concept to enhance the server.xml file with additional configuration files. Alternatively, you can specify additional configuration files in the configDropins directory without specifying include elements in the server.xml file. If you want to add configuration files to override anything in the server.xml file of the server, create a configDropins/overrides directory. 
+In this case, you want to add/change the log level of the application server.
+
+1. Create a configDropins directory in the server directory.
+
+        mkdir -p wlp_usr/servers/myServer/configDropins/overrides
+
+    <kbd>![image146](./images/media/image146.png)</kbd>
+
+
+**Add INFO logging output to console**
+
+Liberty provides the ability to set the logging level to any of the supported log levels defined in the documentation: https://www.ibm.com/docs/en/was-liberty/base?topic=liberty-logging-trace 
+- AUDIT logging enables logging of “Significant event affecting server state or resources”
+- INFO logging enables of “General information outlining overall task progress”
+By default, the Liberty Server has the console log level set to AUDIT.
+In this section, you will change the level of log messages written to the console from AUDIT to INFO, which will result in additional logging messages.
+You will perform this activity not directly in the server.xml file but using the configDropins concept. Purpose is that you could change the log level easily on the fly and switch back to the previous level without having to manually edit a file. 
+
+
+<table>
+    <tbody>
+    <tr class="odd">
+    <td><kbd><img src="./images/media/info.png" alt="sign-info" /></kbd></td>
+    <td>
+    <p>Note: <br>
+        It is also possible to set default logging options in the bootstrap.properties file. <br>
+        If the logging options are set in the bootstrap.properties file, the logging options will take effect very early in server startup, <br>
+        so it may be useful for debugging server initialization problems.
+    </p></td>
+    </tr>
+    </tbody>
+</table>
+
+2. Switch to the terminal currently running the tail on the file messages.log and press CTRL+C to stop it.
+    
+3. Review the current console logging and you can see that it only contains messages from type AUDIT.
+
+        tail -f wlp_usr/servers/myServer/logs/console.log
+
+    <kbd>![image147](./images/media/image147.png)</kbd>
+
+4. Switch to the second terminal window. Create a server configuration file to change the console log level to INFO via the following command:
+
+        echo '
+        <server>
+            <logging consoleLogLevel="INFO"> </logging>
+        </server>
+        ' > wlp_usr/servers/myServer/configDropins/overrides/loglevel-config.xml
+
+    <kbd>![image148](./images/media/image148.png)</kbd>
+
+5. Switch to the terminal window running tail to verify, that the new file has been detected.
+
+    <kbd>![image149](./images/media/image149.png)</kbd>
+
+    You will verify that messages of log level **INFO** will now be logged during the configuration of tracing.
+
+
+**Update trace specification**
+
+By default, the Liberty Server trace specification is set to **"*=info=enabled"**. 
+
+To update the trace specification, you will again use the configDropings concept.
+
+6. Switch to the second terminal window. Update the file **configDropins/overrides/loglevel-config.xml** to include a trace specification via the following command:
+
+        echo '
+        <server>
+            <logging consoleLogLevel="INFO" traceSpecification="webcontainer=all=enabled">
+            </logging>
+        </server>
+        ' > wlp_usr/servers/myServer/configDropins/overrides/loglevel-config.xml
+
+    <kbd>![image150](./images/media/image150.png)</kbd>
+
+7. Switch to the terminal window running tail to verify, that the new file has been detected.
+
+    <kbd>![image151](./images/media/image151.png)</kbd>
+
+    As you can see, messages of log level **INFO** are displayed now which means that the change of the consoleLogLevel has been picked up. <br>
+    The message indicates as expected, that the trace level has been set to “webcontainer=all”. 
+    
+8. Switch to the second terminal window to verify that the trace has been created.
+
+        ls -lrt wlp_usr/servers/myServer/logs
+
+    <kbd>![image152](./images/media/image152.png)</kbd>
+
+9. Remove the file to set the trace level back to default. 
+
+        rm wlp_usr/servers/myServer/configDropins/overrides/loglevel-config.xml
+
+10. Switch to the terminal window running tail to verify, that the new file has been detected.
+
+    <kbd>![image153](./images/media/image153.png)</kbd>
+
+    As you can see, the trace specification has been changed back to **"*=info"**.
+
+11. Press CTRL+C in the terminal window to stop the tail command.
+
+12. Stop the Liberty instance using the following command: 
+
+        wlp/bin/server stop myServer
+
+13. Delete the generated trace files by using  the following command:
+
+        rm wlp_usr/servers/myServer/logs/trace*.log
+
+As you have seen, the logging component can be controlled through the server configuration and it is quite convenient to enable and disable tracing using configDropins.
+
+**Configure logging in the bootstrap.properties file**
+
+Occasionally, you might need to configure trace to diagnose a problem that occurs before the server.xml file is processed. Or you want to change the log format to something other than basic. In this case, the equivalent configuration properties can be specified in the **bootstrap.properties** file. 
+
+If a configuration property is specified in both the bootstrap.properties file and the server.xml file, the value in bootstrap.properties is used until the server.xml file is processed. Then, the value in the server.xml file is used. Avoid specifying different values for the same configuration property in both the bootstrap.properties and the server.xml file.
+
+You will now change the log format to json. As the bootstrap.properties file does not exist, you will simpoly create it.
+
+
+14. Create a bootstrap,properties file that defines the property com.ibm.ws.logging.console.format by executing the following command: 
+
+    echo 'com.ibm.ws.logging.console.format=json' > wlp_usr/servers/myServer/bootstrap.properties
+    cat wlp_usr/servers/myServer/bootstrap.properties
+
+    <kbd>![image154](./images/media/image154.png)</kbd>
+
+15. Start the server via **server run** and you can see that the log format has been set to JSON.
+
+        wlp/bin/server run myServer
+
+    <kbd>![image155](./images/media/image155.png)</kbd>
+
+
+16. In the terminal window, press **CTRL+C** to stop the server.
+
+17. Change the log format back to default by deleting bootstrap.properties, then run the server again.
+
+        rm wlp_usr/servers/myServer/bootstrap.properties
+        wlp/bin/server run myServer
+
+    <kbd>![image156](./images/media/image156.png)</kbd>
+
+18. In the terminal, press **CTRL+C** to stop the server.
+
+If you are interested into additional logging attributes, please take a look at
+https://www.ibm.com/docs/en/was-liberty/base?topic=liberty-logging-trace
+ 
+
+### 6.4.3.9	Review the Liberty configuration via Liberty REST APIs
+
+If you use several includes or config dropins, you might run into the situation where you want to review the final setup. <br>
+This can be done by using the restConnector APIs. 
+
+**Configure the admin access to the Liberty instance**. 
+
+1. First of all, you need a strong password as the APIs provide access to sensitive data which could help a hacker to manipulate the system. Use the securityUtility to create a secure password.
+
+        wlp/bin/securityUtility encode --encoding=aes LibertyIsGreat
+
+    <kbd>![image157](./images/media/image157.png)</kbd>
+
+    As before, the encoded password is not unique, so your output will likely look different that the one above. But both are valid.
+
+2. Use the following command to configure the restConnector. (Update the user password in the following code snippet or keep the password as is).
+
+        echo '
+        <server>
+            <featureManager>
+                <feature>restConnector-2.0</feature>
+            </featureManager>
+        <quickStartSecurity userName="admin" userPassword="{aes}ALCpb79MrIuO8aVUdyXKVDWNssXfX3OmL+xD2J3jWcOgLwrIq1f7/qO8tCR7JwNmcQ==" />
+        </server>
+        ' > wlp_usr/servers/myServer/configDropins/overrides/rest-config.xml
+
+    <kbd>![image158](./images/media/image158.png)</kbd>
+
+3. As the restConnector feature is not installed so far, switch to a terminal window to install the missing features via command:
+
+        wlp/bin/featureUtility installServerFeatures myServer
+
+    <kbd>![image159](./images/media/image159.png)</kbd>
+
+4. Start the Liberty instance by using the command:
+
+        wlp/bin/server start myServer
+
+5. From a browser window, access the Liberty REST APIs via the URL **https://localhost:9443/ibm/api/config**. <br>
+    Enter as Username admin and as password LibertyIsGreat.
+
+    <kbd>![image160](./images/media/image160.png)</kbd>
+
+6. If asked, don’t save the password in the browser. Your browser should display something like this:
+
+    <kbd>![image161](./images/media/image161.png)</kbd>
+
+7. In the browser window, press **CTRL+F** and enter **webapp** to search for webapp. <br>
+        You should find the related settings.
+
+    <kbd>![image162](./images/media/image162.png)</kbd>
+
+8. Search for logging and you get all attributes currently used for logging.
+
+    <kbd>![image163](./images/media/image163.png)</kbd>
+
+9. Finally stop the server and remove the restConnector configuration.
+
+        wlp/bin/server stop myServer
+        rm wlp_usr/servers/myServer/configDropins/overrides/rest-config.xml
+
+For more details about the restConnector for administration, please take a look at:
+**https://www.ibm.com/docs/en/was-liberty/base?topic=features-admin-rest-connector-20**
+
+
+### 6.4.3.10 Using the Liberty AdminCenter
+
+The Liberty AdminCenter can be used to monitor the status of the Liberty server. You will define two users, an administrative user with the role admin and the second user with the role reader. Use again the securityUtility to create two secure passwords.
+
+1. Create a password for the admin user.
+
+            wlp/bin/securityUtility encode --encoding=xor Liberty4Admins
+
+    <kbd>![image164](./images/media/image164.png)</kbd>
+
+2. Create a password for the second user.
+
+            wlp/bin/securityUtility encode --encoding=xor Liberty4Readers
+
+    <kbd>![image165](./images/media/image165.png)</kbd>
+
+3. Execute the following command to Configure the AdminCenter with the two users using the generated passwords generated before.
+
+        echo '
+        <server>
+            <featureManager>
+                <feature>adminCenter-1.0</feature>
+                <feature>websocket-2.1</feature>
+            </featureManager>
+            <!-- Configure administrative roles. -->
+            <basicRegistry realm="basicRealm">
+                <user name="admin" password="{xor}EzY9Oi0rJmseOzI2MSw=" />
+                <user name="reader" password="{xor}EzY9Oi0rJmsNOj47Oi0s" />
+            </basicRegistry> 
+            <!-- Assign 'admin' to Administrator -->
+            <administrator-role>
+                <user>admin</user>
+            </administrator-role>
+            <reader-role>
+                <user>reader</user>
+            </reader-role>
+        </server>
+        ' > wlp_usr/servers/myServer/configDropins/overrides/adminCenter-config.xml
+
+    <kbd>![image166](./images/media/image166.png)</kbd>
+
+4. As the AdminCenter feature is not installed so far, switch to a terminal window to install the feature via command:
+
+        wlp/bin/featureUtility installServerFeatures myServer
+    
+    <kbd>![image167](./images/media/image167.png)</kbd>
+
+5. Start the server and take a look at the log:
+
+        wlp/bin/server start myServer
+        tail -f wlp_usr/servers/myServer/logs/messages.log
+
+    <kbd>![image168](./images/media/image168.png)</kbd>
+
+    As you can see, the admin-center feature has been enabled. 
+    
+6. Access the Liberty Admin Center via URL **https://localhost:9443/adminCenter**, then enter the credentials for the admin user (admin/Liberty4Admins) and press **Submit**.
+
+    <kbd>![image169](./images/media/image169.png)</kbd>
+
+7. The Admin Center Toolbox is displayed. Click on **Explore** to explore the Liberty status, the applications as well monitoring data and configuration.
+
+    <kbd>![image170](./images/media/image170.png)</kbd>
+
+8. On the tab **Overview** take a look at the running servers and applications. 
+
+    <kbd>![image171](./images/media/image171.png)</kbd>
+
+    You would see more than one server if a collection would have been defined.
+
+9. On the tab **Applications** you can see the running applications. 
+    As user with admin rights, you can use the menu to start, stop or restart an application.
+
+    <kbd>![image172](./images/media/image172.png)</kbd>
+
+10. On the tab **Montor**, you can see basic performance data. 
+
+    <kbd>![image173](./images/media/image173.png)</kbd>
+
+    As you can see here, the Used Heap Memory max value above 1.9 MB which indicates that max heap has not been defined. You will change that in the next section of the lab.
+
+11. On the tab **Configure**, you can see current configuration. 
+
+    <kbd>![image174](./images/media/image174.png)</kbd>
+
+    You can see a warning that remote file access is not configured. You can ignore that as you will not configure Liberty via AdminCenter. But you could click on the link to see the configuration in design and source view.
 
 <br>    
+
+
 
 ### 10. Cleanup
 
