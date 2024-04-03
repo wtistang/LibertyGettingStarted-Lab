@@ -637,6 +637,20 @@ In this part of the lab, you will explore how to create configuration snippets a
 
 You will now explore the Liberty server package to get a better understanding how to use it, in addition you will use it to learn more about **Liberty administration from the command line** and **Liberty dynamic updates**.
 
+
+<table>
+    <tbody>
+    <tr class="odd">
+    <td><kbd><img src="./images/media/info.png"  alt="sign-info" /></kbd></td>
+    <td>
+    <p>In this section, you will use the <strong>server run</strong> command instead of the <strong>server start</strong> command.<br>
+    This will allow you to see the logs immediately instead of having to use a tail command. <br>
+    It will also allow you to stop the Liberty server via <strong>CTRL+C</strong></td>
+    </tr>
+    </tbody>
+    </table>
+
+
 ### 6.4.1.1 Liberty administration from the command line
 
 1. Extract the Liberty server package and try to run it. When asked, enter **test** as target directory.
@@ -763,14 +777,368 @@ Let’s do a short excurse about Liberty dynamic updates. You will use Visual St
     <kbd>![image080](./images/media/image080.png)</kbd>
 
 
-### 6.4.2 Create Liberty configuration snippets.
+### 6.4.2 Create Liberty configuration snippets
+
+There are different ways to create a Liberty server configuration. And there are often different roles involved to get the final configuration for production. The application specific configuration for example is typically created by the application developer while security related configuration is typically done by operations. Operations is typically also responsible to make the configuration portable across stages, configure logging and so on. 
+
+You could create Liberty configuration snippets by copying over the related snippets from the product documentation and adjust them in a normal text editor. In this part of the lab, you will see that the Liberty tools plugin in Visual Studio Code can help you to speed up the create of configuration snippets as it provides configuration assistance including documentation. Let’s get started.
+
+You will now modify the file **server.xml** which has been provided as part of the server package to make it more portable and re-usable.
+
+1. In Visual Studio Code, open the file **server.xml** if you closed it previously.
+
+    <kbd>![image081](./images/media/image081.png)</kbd>
+
+2. Take a look at the httpEndpoint element.
+
+    <kbd>![image082](./images/media/image082.png)</kbd>
+
+     As mentioned in the comment, the httpEndpoint is by default not accessible from a remote client.
+     This is good from security point of view and works fine if the client is local to the server. But if you for example use a remote load balancer or a remote HTTP server, that does not work. So there will be likely situations where you want to allow access from a remote client. To allow remote access, you must add a host attribute. You will use the Liberty Tools configuration assistant to do this.
+
+3. Place the cursor at the end of the line **<httpEndpoint id="defaultHttpEndpoint"** and press **ENTER** to add another line. 
+
+    In the new line, press **CTRL+SPACE** to see the available attributes. 
+    
+    Use the arrow-down key and navigate to the **host** attribute to see the description of the attribute.
+
+    <kbd>![image083](./images/media/image083.png)</kbd>
+
+4. Select host and your configuration should look like this:
+
+    <kbd>![image084](./images/media/image084.png)</kbd>
+
+    As you can see, the attribute host defaults to localhost.
+
+### 6.4.2.1 Use variables for portability
+
+To make the configuration portable, you will replace the fixed values for ports and host with Liberty variables. Liberty variables can be defined with a default value and overridden from inside or outside Liberty. To show the concept, you will adjust the httpEndpoint settings.
+
+You could use the configuration snippet below to replace the existing httpEndpoint configuration with a portable configuration. 
+
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="${httpEndpoint_host}"
+                  httpPort="${httpEndpoint_port}"
+                  httpsPort="${httpEndpoint_secure_port}" />
+    <variable name="httpEndpoint_host" defaultValue="*"/>
+    <variable name="httpEndpoint_port" defaultValue="9080"/>
+    <variable name="httpEndpoint_secure_port" defaultValue="9443"/>
+
+Instead you will use the Liberty configuration assistant to get an understanding how you could create such a configuration snippet.
+
+1. Place the cursor in an empty line under the httpEndpoint section, then enter **var** and press **CTRL+SPACE**.
+
+    <kbd>![image085](./images/media/image085.png)</kbd>
+
+2. Select **variable**, then enter as name **"httpEndpoint_port"**.
+
+    <kbd>![image086](./images/media/image086.png)</kbd>
+
+3. Place the cursor after **name="httpEndpoint_port"**, enter a **SPACE** and press **CTRL+SPACE**.
+
+    <kbd>![image087](./images/media/image087.png)</kbd>
+
+4. Select **defaultValue** and enter as value **9080**.
+
+    <kbd>![image088](./images/media/image088.png)</kbd> 
+
+5. Use copy and paste to create two additional variables: 
+    - one with the name **"httpEndpoint_secure_port"** and the default value **"9443"**
+    - the other one with the name **"httpEndpoint_host"** and the value **"*"**.
+    
+    Your configuration should now look like this:
+
+    <kbd>![image089](./images/media/image089.png)</kbd>
+
+6. Switch to the **httpEndpoint** section, remove for the attribute **host** the value **"localhost"**, enter **${ht** and press **CTRL+SPACE**.
+
+    <kbd>![image090](./images/media/image090.png)</kbd>
+
+    As you can see, the variable names are offered. 
+    
+7. Select **"httpEndpoint_host"**, then enter **"}"**. Your configuration should look like this:
+
+    <kbd>![image090b](./images/media/image090b.png)</kbd>
+
+8. Do the same kind of change for the attributes **httpPort** and **httpsPort**. 
+    
+    Your final httpEndpoint configuration should now look like this:
+
+    <kbd>![image091](./images/media/image091.png)</kbd>
+
+9. Save your changes.
+
+
+Your **server.xml** file should now look like this:
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <server description="new server">
+
+        <!-- Enable features -->
+        <featureManager>
+            <feature>servlet-6.0</feature>
+        </featureManager>
+    
+
+        <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+        <httpEndpoint id="defaultHttpEndpoint"
+                      host="${httpEndpoint_host}"
+                      httpPort="${httpEndpoint_port}"
+                      httpsPort="${httpEndpoint_secure_port}" />
+        <variable name="httpEndpoint_host" defaultValue="*"/>
+        <variable name="httpEndpoint_port" defaultValue="9080"/>
+        <variable name="httpEndpoint_secure_port" defaultValue="9443"/>
+
+        <!-- Automatically expand WAR files and EAR files -->
+        <applicationManager autoExpand="true"/>
+
+        <!-- Configures the application on a specified context root -->
+        <webApplication contextRoot="/mysimpleweb" location="simpleweb.war" />
+
+        <!-- Default SSL configuration enables trust for default certificates from the Java runtime -->
+        <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
+    </server>
+
+Now let's test if the Liberty configuration is really portable.
+
+10. From the Visual Studio Code terminal, start the Liberty server instance via the following command:
+
+    wlp/bin/server run defaultServer
+
+    <kbd>![image092](./images/media/image092.png)</kbd>
+
+    As you can see, the Liberty server gets started and listens on port **9080**.
+
+11. Press **CTRL+C** to stop the server. 
+
+12. Set the httpEnpoint_port value in the Operating System environment variable and start the Liberty server again.
+
+        export httpEndpoint_port=9081
+        wlp/bin/server run defaultServer
+
+    <kbd>![image093](./images/media/image093.png)</kbd>
+
+    As you can see, the Liberty server now listens on port **9081**, which shows that you can now override from outside Liberty the default settings defined in the Liberty server.xml file. In a Kubernetes environment, you could for example use a config map to change configuration settings.
+
+13. Press **CTRL+C** to stop the server. Then unset the operating system variable by the following command:
+
+        unset httpEndpoint_port
+
+
+### 6.4.2.2 Use includes for better re-use and visibility
+
+If you configure a Liberty server with resources like datasources or JMS queues, user registry and more, your configureation file can get quite long and not easy to be read and maintained. Liberty allows to specify configuration resources to get included into the server configuration. This helps to keep control over the configuration, provides better reuse of the different configuration and allows to split the responsibility for the configuration between different teams. The developer for example could create the application specific configuration and operations the security configuration.
+
+You will now use **includes** to structure the server configuration.
+
+1. In the terminal in Visual Studio Code, copy the existing server.xml file into a new file called application-config.xml.
+
+        cp wlp/usr/servers/defaultServer/server.xml wlp/usr/servers/defaultServer/application-config.xml
+
+    <kbd>![image094](./images/media/image094.png)</kbd>
+
+2. Open the newly created file application-config.xml in Visual Studio Code.
+
+    <kbd>![image095](./images/media/image095.png)</kbd>
+
+3. Remove all configuration inside the server section other than the definition of the webApplication element.
+    Your application-config.xml should look like this:
+
+    <kbd>![image096](./images/media/image096.png)</kbd>
+
+4. Save the changes, then close the file application-config.xml.
+
+5. Switch to the server.xml file. Remove the webApplication definition, then enter **include** and press **CTRL+SPACE**.
+
+    The Liberty configuration assistant shows you the available elements.
+
+    <kbd>![image097](./images/media/image097.png)</kbd>
+
+6. Select **include** and the element gets generated. As value for **location**, enter **"application-config.xml"**.
+
+    <kbd>![image098](./images/media/image098.png)</kbd>
+
+7. As the owner of the server.xml file, you might want to decide what happens if the file to be included does not exist or contains conflicting configuration settings. 
+
+    Go to the end of the include statement and press **CTRL+SPACE**. The available attributes for the include element are displayed.
+
+    <kbd>![image099](./images/media/image099.png)</kbd>
+
+    As you can see, you could define the include file as optional, so Liberty would not throw an error if the include file is missing. 
+
+8. Click on **onConflict** to see the available attributes for that options. 
+
+    <kbd>![image100](./images/media/image100.png)</kbd>
+
+    If you want to make sure, that settings in the server.xml cannot be overridden by included files, select **IGNORE**, otherwise use **MERGE** or **REPLACE**. 
+    
+9. Click on **MERGE** and your include statement should look like this:
+
+        <include location="application-config.xml" onConflict="MERGE"/>
+
+    <kbd>![image101](./images/media/image101.png)</kbd>
+
+
+You can configure multiple include files, for example one file for security-config.xml and another one for resource specific configuration settings like for databases or JMS. Now let's test if the **include** works.
+
+10. From the Visual Studio Code terminal, start the Liberty server instance via the following command:
+
+        wlp/bin/server run defaultServer
+
+    As you can see, the **include** has been found and processed, so that the application is started.
+
+    <kbd>![image102](./images/media/image102.png)</kbd>
+
+Keep the server running as we need it in the next section.
+
+### 6.4.2.3	Enable transport security
+
+Right now, you are not able to access Liberty via HTTPS. While the HTTPS port 9443 has been defined, SSL has not been enabled in Liberty. SSL can be enabled using the transport security feature. So the next step is to enable transport security and take a look at other related topics like keystores.
+
+1. In the file **server.xml**, navigate the to featureManager section.
+
+2. Add the feature **transportSecurity-1.0** to the **featureManager** section by add the line:
+
+        <feature> transportSecurity-1.0 </feature>
+
+    Alternatively, you can use the configuration assistant to enable it.
+
+    <kbd>![image103](./images/media/image103.png)</kbd>
+
+3. Take a look at the logs and you can see that the feature is not available yet.
+
+    <kbd>![image104](./images/media/image104.png)</kbd>
+
+    This is due to the fact that the Liberty server package generated by the developer only includes the required features (features that have been defined in the server configuration file). You will use the Liberty **featureUtility tool** to install the missing feature. The feature could be downloaded from a local repository if configured, in this case you will download it from a central maven repository.
+
+4. In the terminal window, stop the Liberty instance by pressing **CTRL+C**.
+
+    Then execute the following command to install the missing feature from the maven repository:
+
+        wlp/bin/featureUtility installFeature transportSecurity-1.0
+
+    <kbd>![image105](./images/media/image105.png)</kbd>
+
+5. Then start the Liberty instance again by running the following command:
+
+        wlp/bin/server run defaultServer
+
+    <kbd>![image106](./images/media/image106.png)</kbd>
+
+    As you can see, Liberty created a certificate and placed it into the SSL key file **"wlp/usr/servers/defaultServer/resources/security/key.p12"**. 
+
+6. Liberty used the variable **keystore_password** to secure the keystore. As you did not define a value for the variable keystore_password, Liberty generated a password and stored it in the file **server.env**. In Visual Studio, open the file **server.env** to see the keystore password. Your password will likely look different as it has been generated randomly.
+
+    <kbd>![image107](./images/media/image107.png)</kbd>
+
+    Close the file server.env.
+
+7. To make it more visible where the keystore password comes from, add the following definition to the server.xml file:
+
+        <keyStore id="defaultKeyStore" password="${keystore_password}" />
+
+    The keyStore element also allows you to specify a different keystore location and much more.
+
+    <kbd>![image108](./images/media/image108.png)</kbd>
+
+8. Review your configuration in **server.xml**. It should look like this:
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <server description="new server">
+
+            <!-- Enable features -->
+            <featureManager>
+                <feature>servlet-6.0</feature>
+                <feature>transportSecurity-1.0</feature>
+            </featureManager>
+    
+
+            <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+            <httpEndpoint id="defaultHttpEndpoint"
+                        host="${httpEndpoint_host}"
+                        httpPort="${httpEndpoint_port}"
+                        httpsPort="${httpEndpoint_secure_port}" />
+            <variable name="httpEndpoint_host" defaultValue="*"/>
+            <variable name="httpEndpoint_port" defaultValue="9080"/>
+            <variable name="httpEndpoint_secure_port" defaultValue="9443"/>
+
+            <!-- Automatically expand WAR files and EAR files -->
+            <applicationManager autoExpand="true"/>
+
+            <!-- Configures the application on a specified context root -->
+            <include location="application-config.xml" onConflict="MERGE"/>
+
+            <!-- Default SSL configuration enables trust for default certificates from the Java runtime -->
+            <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
+            <keyStore id="defaultKeyStore" password="${keystore_password}" />
+        </server>
+
+9. Now let's see if the application is accessible via HTTPS. 
+
+    Switch to the browser and access Liberty via **https://localhost:9443/mysimpleweb/helloWorld**.
+
+    You should get a security warning like this:
+
+    <kbd>![image109](./images/media/image109.png)</kbd>
+
+10. Click on **Advanced**, then scroll down and click on **"Accept the Risk and Continue"**.
+
+    <kbd>![image110](./images/media/image110.png)</kbd>
+
+11. You should see the output of the web application.
+
+    <kbd>![image111](./images/media/image111.png)</kbd>
+
+12. Switch back to Visual Studio Code and stop the running Liberty instance by entering **CTRL+C** in the terminal window. 
+
+13. Close Visual Studio Code.
+
+### 6.4.2.4 Backup the generated files
+
+You will re-use the generated configuration snippets and other assets in the next section of the lab. Therefore it is a good approach to create a snippet repository. Configuration snippets are typically hosted in a git repository or so, here you will use the folder ~/Student/assets. You will also use the asset directory to store the application WAR file.
+
+1. Copy the generated configuration files as well as the application war file into the assets directory.
+
+        cp ~/Student/ops/test/wlp/usr/servers/defaultServer/server.* ~/Student/assets
+
+        cp ~/Student/ops/test/wlp/usr/servers/defaultServer/application-config.xml ~/Student/assets
+
+        cp ~/Student/ops/test/wlp/usr/servers/defaultServer/apps/simpleweb.war ~/Student/assets
+
+    <kbd>![image112](./images/media/image112a.png)</kbd>
+
+2. Verify that the assets directory contains the application WAR as well as the configuration files. It also contains the server package but this is no longer required.
+
+        ls ~/Student/assets
+
+    <kbd>![image112](./images/media/image112b.png)</kbd>
+
+3. If not already done, exit **Visual Studio Code** and stop any running Liberty instance.
+
+
+### 6.4.2.5 Recap
+
+In this section of the lab, you got an impression how to create and use configuration snippets:
+
+- You used the **Liberty Tools configuration assistant** to create configuration snippets and to configure Liberty. 
+- You used the **Liberty featureUtility tool** to install missing features.
+- You learned how to use **variables** to make the configuration more portable.
+- You learned how to use **includes** to split the configuration into multiple re-usable files.
+- You created a security configuration. 
+
+Comments:
+- Instead of using the Liberty Tools configuration assistant in Visual Studio Code, you could also use the product documentation and copy & paste to create Liberty configuration snippets. 
+- You could also use the IBM migration tools to transform an existing configuration for WebSphere Traditional and other runtimes into a Liberty configuration.
+
+### 6.4.3 Operations
 
 
 
 
 
 <br>    
-## 10. Cleanup
+
+### 10. Cleanup
 
 1.  **`Stop`** and **`remove`** the container. Then check that the container has been removed, by using the “**docker ps -a”** command
 
