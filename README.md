@@ -132,7 +132,7 @@ The lab environment contains one (1) Linux VM, named Workstation.
       <kbd>![](./images/media/vnc-connect.png)</kbd>
 
 
-    e. Enter the password as:  **`passw0rd`**. Then click the **`Send Credentials`** button to access the lab environment. 
+    e. Enter the password as:  **`IBMDem0s!`**. Then click the **`Send Credentials`** button to access the lab environment. 
 
     > Note: That is a numeric zero in passw0rd  
 
