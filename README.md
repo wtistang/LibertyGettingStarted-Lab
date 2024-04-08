@@ -468,7 +468,7 @@ As best practice to optimize the footprint of the application runtime regarding 
 11. Close the **server.xml** file.
 
 
-### 6.3.4	Using Liberty Dev Mode
+### 6.3.4 Using Liberty Dev Mode
 
 Liberty development mode, or dev mode, allows you to develop applications with any text editor or IDE by providing hot reload and deployment, on demand testing, and debugger support. Liberty Dev Mode is enabled through Maven and Gradle projects.
 
@@ -659,7 +659,7 @@ You acted as developer and used Visual Studio Code and the Liberty Tools for the
 
 Useful links: https://github.com/OpenLiberty/liberty-tools-vscode/blob/HEAD/docs/user-guide.md 
 
-### 6.4 Liberty operations 
+### 6.4 Liberty Operations 
 
 Now you will work with Liberty from an operational point of view. Development has handed over a Liberty server package to you. The server package contains all necessary configuration to run the application called **simpleweb**. The provided server package is typically not production-ready, as it is likely not portable between stages and does not fulfill the requirements regarding security and so on. 
 
@@ -1019,7 +1019,7 @@ You will now use **includes** to structure the server configuration.
 
     Keep the server running as we need it in the next section.
 
-### 6.4.2.3	Enable transport security
+### 6.4.2.3 Enable transport security
 
 Right now, you are not able to access Liberty via HTTPS. While the HTTPS port 9443 has been defined, SSL has not been enabled in Liberty. SSL can be enabled using the transport security feature. So the next step is to enable transport security and take a look at other related topics like keystores.
 
@@ -1161,7 +1161,7 @@ Comments:
 
 ### 6.5 Liberty Administration
 
-Now let’s switch to Liberty Admistrator role and explor how to install and configure Liberty from an administrator point of view. 
+Now let’s switch to Liberty Admistrator role and explore how to install and configure Liberty from an administrator point of view. 
 
 A traditional administrator typically downloads the application server binaries from the IBM pages and uses a regular editor instead of an IDE like Visual Studio to configure Liberty. To download the latest version of WebSphere Liberty, the administrator can use the IBM support page https://www.ibm.com/support/pages/recommended-updates-websphere-application-server
 
@@ -1240,7 +1240,7 @@ The best practice for Liberty installation is to create a minimal installation b
 </table>
 
 
-### 6.5.2	Introducing Liberty Environment Variable Configuration
+### 6.5.2 Introducing Liberty Environment Variable Configuration
 
 You can customize the Liberty environment using certain specific variables to support the placement of product binaries and shared resources. The Liberty environment variables are specified using server.env file. You can use server.env file at the installation and server levels to specify environment variables such as **JAVA_HOME**, **WLP\_USER\_DIR** and **WLP\_OUTPUT\_DIR**.
 Here some of the Liberty specific variables can be used to customize the Liberty environment:
@@ -1326,7 +1326,7 @@ The **server create** command creates by default the user directory in a sub-dir
 </table>
 
 
-### 6.5.4	Install required features
+### 6.5.4 Install required features
 
 You installed the Liberty kernel package which does not contain any features. The next step is to install the required features. Instead of looking into the Liberty configuration to determine which features are required, you can let Liberty inspect which features are missing. This can be done using the featureUtility and specifying the server you are looking for. The command by default will download the required features from the online repository. In an air-gapped environment, you could download the feature repository from the IBM support page and then specify in the featureUtility command to use a local repository. 
 
@@ -1344,7 +1344,7 @@ You installed the Liberty kernel package which does not contain any features. Th
 
     <kbd>![image127](./images/media/image127.png)</kbd>
 
-### 6.5.5	Use your own keystore
+### 6.5.5 Use your own keystore
 
 If you do not create a keystore but enable SSL, Liberty will create a keystore with a random password. Now, you will create your own keystore with a password of choice. 
 
@@ -1390,7 +1390,7 @@ If you do not create a keystore but enable SSL, Liberty will create a keystore w
     </tbody>
 </table>
 
-### 6.5.6	Verify that the server configuration works:
+### 6.5.6 Verify that the server configuration works:
 
 1. Start the server via the following command:
 
@@ -1412,7 +1412,7 @@ If you do not create a keystore but enable SSL, Liberty will create a keystore w
 
         wlp/bin/server stop myServer
 
-### 6.5.7	Deploying a sample application to Liberty
+### 6.5.7 Deploying a sample application to Liberty
 
 In the first part of this lab, you used the Liberty Tools to develop an application and configure Liberty. The application got deployed via maven under the cover. Then you used the Liberty server package which already included the deployed application. In this section of the lab, you will deploy an application to Liberty using two different techniques.
 
@@ -1508,7 +1508,7 @@ Now you will deploy the simpleweb application by adding it to the Liberty server
 **You have successfully deployed the web application into Liberty, first via dropins directory, then by adding it to the server.xml file via include.**
 
 
-### 6.5.8	Change logging and tracing by using ConfigDropins
+### 6.5.8 Change logging and tracing by using ConfigDropins
 
 Right now, you used the **include** concept to enhance the server.xml file with additional configuration files. Alternatively, you can specify additional configuration files in the **configDropins** directory without specifying include elements in the **server.xml** file. If you want to add configuration files to override anything in the **erver.xml** file of the server, create a **configDropins/overrides** directory. 
 In this case, you want to add/change the log level of the application server.
@@ -1657,7 +1657,7 @@ In this case, you want to add/change the log level of the application server.
     If you are interested into additional logging attributes, please take a look at: https://www.ibm.com/docs/en/was-liberty/base?topic=liberty-logging-trace
  
 
-### 6.5.9	Review the Liberty configuration via Liberty REST APIs
+### 6.5.9 Review the Liberty configuration via Liberty REST APIs
 
 If you use several includes or config dropins, you might run into the situation where you want to review the final setup. This can be done by using the **restConnector** APIs. 
 
