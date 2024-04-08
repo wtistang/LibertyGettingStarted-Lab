@@ -33,7 +33,7 @@ Liberty Tools also provides helpful, time-saving features such as code completio
 In the lab, there will be different roles involved with perform different tasks using different tools. You will perform all the different roles during the lab. 
 
 * You will start as an application developer and use Liberty starter and the code assistant to develop a simple web application. But don't worry, you do not have to be a developer to do this.
-* As Liberty configuration operator, you will use the configuration assistant and concepts like includes and variables to create a portable configuration. 
+* As Liberty configuration opertor, you will use the configuration assistant and concepts like includes and variables to create a portable configuration. 
 * As Liberty administrator, you will install Liberty from a kernel image, add missing features, configure logging, security and so on, will use the Liberty REST APIs to review the configuration and use Liberty Admin Center for monitoring.
 
 ## 2. Objective
