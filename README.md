@@ -32,8 +32,8 @@ Liberty Tools also provides helpful, time-saving features such as code completio
 
 In the lab, there will be different roles involved with perform different tasks using different tools. You will perform all the different roles during the lab. 
 
-* You will start as an application developer and use Liberty starter and the code assistant to develop a simple web application. But don't worry, you do not have to be a developer to do this.
-* As Liberty configuration operator, you will use the configuration assistant and concepts like includes and variables to create a portable configuration. 
+* You will start as an application developer and use Liberty starter and the Liberty Tools code assistant to develop a simple web application. But don't worry, you do not have to be a developer to do this.
+* As Liberty configuration operator, you will use the Liberty Tools configuration assistant and concepts like includes and variables to create a portable configuration. 
 * As Liberty administrator, you will install Liberty from a kernel image, add missing features, configure logging, security and so on, will use the Liberty REST APIs to review the configuration and use Liberty Admin Center for monitoring.
 
 ## 2. Objective
@@ -424,7 +424,7 @@ As best practice to optimize the footprint of the application runtime regarding 
 
     <kbd>![image031](./images/media/image031.png)</kbd>
 
-3. Now you will use the **Liberty configuration assistant** to define the servlet feature. Place your cursor at the beginning of an empty line in the featureManager section. Then press the **CTRL key** and press **SPACE** to activate the configuration assistant. You should see something like:
+3. Now you will use the **Liberty Tools configuration assistant** to define the servlet feature. Place your cursor at the beginning of an empty line in the featureManager section. Then press the **CTRL key** and press **SPACE** to activate the Liberty Tools configuration assistant. You should see something like:
 
     <kbd>![image032](./images/media/image032.png)</kbd>
 <table>
@@ -516,7 +516,7 @@ In the lab environment, the Liberty tools plugin has been installed into Visual 
 
 ### 6.3.5 Edit the simpleweb application
 
-Now you will edit the **simpleweb** application which only consists of a servlet. Thanks to Liberty code assistant, you don't have to write the code on your own. 
+Now you will edit the **simpleweb** application which only consists of a servlet. Thanks to Liberty Tools code assistant, you don't have to write the code on your own. 
 
 1. Switch to Visual Studio Code.
 
@@ -852,7 +852,7 @@ You could use the configuration snippet below to replace the existing httpEndpoi
     <variable name="httpEndpoint_port" defaultValue="9080"/>
     <variable name="httpEndpoint_secure_port" defaultValue="9443"/>
 
-Instead you will use the Liberty configuration assistant to get an understanding how you could create such a configuration snippet.
+Instead you will use the Liberty Tools configuration assistant to get an understanding how you could create such a configuration snippet.
 
 1. Place the cursor in an empty line under the httpEndpoint section, then enter **var** and press **CTRL+SPACE**.
 
@@ -977,7 +977,7 @@ You will now use **includes** to structure the server configuration.
 
 5. Switch to the server.xml file. Delete the **webApplication** element, then enter **include** and press **CTRL+SPACE**.
 
-    The Liberty configuration assistant shows you the available elements.
+    The Liberty Tools configuration assistant shows you the available elements.
 
     <kbd>![image097](./images/media/image097.png)</kbd>
 
