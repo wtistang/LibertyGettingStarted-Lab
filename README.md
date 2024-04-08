@@ -478,7 +478,19 @@ You can run tests on demand or even automatically so that you can get immediate 
 
 <kbd>![LibertyDevMode](./images/media/LibertyDevMode.png)</kbd>
 
-You can use the capabilities of Liberty dev mode inside and outside of an IDE. This provides you the flexibility of choice. In a terminal window, you would use Liberty in dev mode with maven using the command **mvn liberty:dev** or **mvn liberty:devc** if you want to develop in a container. 
+<table>
+<tbody>
+<tr class="odd">
+<td><kbd><img src="./images/media/info.png" alt="sign-info" /></kbd></td>
+<td>
+<p>You can use the capabilities of Liberty dev mode inside and outside of an IDE. This provides you the flexibility of choice, so you can decide which IDE to use. <br>
+In a terminal window, you would use Liberty in dev mode with maven using the command <strong>mvn liberty:dev</strong> (or <strong>mvn liberty:devc</strong> if you want to develop in a container).  <br> For gradle, the related commands are <strong>gradle libertyDev</strong> and <strong>gradle libertyDevc</strong>.
+</p></td>
+</tr>
+</tbody>
+</table>
+
+
 
 In the lab environment, the Liberty tools plugin has been installed into Visual Studio Code. Therefore you will use the integrated Liberty dashboard instead. 
 
@@ -668,6 +680,7 @@ In this part of the lab, you will explore how to create configuration snippets a
 ### 6.4.1 Explore the server package
 
 You will now explore the Liberty server package to get a better understanding how to use it, in addition you will use it to learn more about **Liberty administration from the command line** and **Liberty dynamic updates**.
+
 <table>
 <tbody>
 <tr class="odd">
