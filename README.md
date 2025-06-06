@@ -1802,7 +1802,7 @@ The Liberty **AdminCenter** can be used to monitor the status of the Liberty ser
 
     <kbd>![image171](./images/media/image171.png)</kbd>
 
-    You would see more than one server if a collection would have been defined.
+    You would see more than one server if a collective would have been defined.
 
 9. On the tab **Applications** you can see the running applications. As user with admin rights, you can use the menu to start, stop or restart an application.
 
