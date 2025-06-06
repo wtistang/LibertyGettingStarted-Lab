@@ -890,7 +890,7 @@ Instead you will use the Liberty Tools configuration assistant to get an underst
 
     <kbd>![image089](./images/media/image089.png)</kbd>
 
-6. Switch to the **httpEndpoint** section, remove for the attribute **host** the value **"localhost"**, enter **${ht** and press **CTRL+SPACE**.
+6. Switch to the **httpEndpoint** section, remove from the attribute **host** the value **"localhost"**, enter **${ht** and press **CTRL+SPACE**.
 
     <kbd>![image090](./images/media/image090.png)</kbd>
 
