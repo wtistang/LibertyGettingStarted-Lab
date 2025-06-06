@@ -315,7 +315,7 @@ The **Open Liberty starter** gives you a simple, quick way to get the necessary 
 </tbody>
 </table>
 
-3. Change the artifact name to **simpleweb**, change the Java level to **17** and the MicroProfile version to **6.1**, then click on **Generate project** 
+3. Change the artifact name to **simpleweb**, change the Java level to **17** and the MicroProfile Version to **6.1**, then click on **Generate Project** 
 
     <kbd>![LibertyStarter-simpleweb](./images/media/LibertyStarter-simpleweb.png)</kbd>
 
