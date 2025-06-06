@@ -743,7 +743,7 @@ You will now explore the Liberty server package to get a better understanding ho
 
     <kbd>![image067](./images/media/image067.png)</kbd>
     
-    At the beginning of the log, you can see the Open Liberty version that is used (version 24.0.0.2 or later.
+    At the beginning of the log, you can see the Open Liberty version that is used (version 24.0.0.2 or later).
     The server is started when the message **“The defaultServer server is ready to run a smarter planet”** is displayed in the messages.log file.
 
 7. Test that the application is accessible via URL **http://localhost:9080/simpleweb/helloWorld**
