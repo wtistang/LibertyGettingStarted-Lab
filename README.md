@@ -497,7 +497,7 @@ In the lab environment, the Liberty tools plugin has been installed into Visual 
 
     <kbd>![image040](./images/media/image040.png)</kbd>
 
-2. Right-click on **simpleweb** and then **start** to start the server in dev mode.
+2. Right-click on **simpleweb** and then **Start** to start the server in dev mode.
 
     <kbd>![image041](./images/media/image041.png)</kbd>
 
