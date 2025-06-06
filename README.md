@@ -1852,11 +1852,10 @@ The generic JVM arguments are used to configure and adjust how the JVM executes.
 
 1. Create a **jvm.options** file with definitions for min and max heap by executing the following command:
 
-        echo '
-        -Xms25m
-        -Xmx500m
-        ' > wlp_usr/servers/myServer/jvm.options
+        echo '-Xms25m' > wlp_usr/servers/myServer/jvm.options
+        echo '-Xmx500m' >> wlp_usr/servers/myServer/jvm.options
         cat wlp_usr/servers/myServer/jvm.options
+
 
     <kbd>![image179](./images/media/image179.png)</kbd>
 
