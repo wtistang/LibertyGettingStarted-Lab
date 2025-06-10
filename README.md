@@ -894,9 +894,11 @@ Instead you will use the Liberty Tools configuration assistant to get an underst
 
     <kbd>![image090](./images/media/image090.png)</kbd>
 
-    As you can see, the variable names are offered. 
+    As you can see, the variable names are offered. <p>
+    HINT: If the code completion shows **no suggestion**, remove the bracket **{** so that only **$ht** remains and do the code completion. 
     
-7. Select **"httpEndpoint_host"**, then enter **"}"**. Your configuration should look like this:
+7. Select **"httpEndpoint_host"**, then enter **"}"**. 
+Your configuration should look like this:
 
     <kbd>![image090b](./images/media/image090b.png)</kbd>
 
