@@ -15,7 +15,7 @@ Need support? Contact **Lars Besselmann, Kevin Postreich**
 
 WebSphere Liberty (**Liberty**) is a lightweight open framework for building fast and efficient cloud-native Java microservices. Build cloud-native apps and microservices while running only what you need. It is the most flexible server runtime available to Java developers in this solar system.
 
-Liberty is built on the open source Open Liberty codebase. Open Liberty is designed with both developers and application business owners in mind.
+Liberty is built on the open-source Open Liberty codebase. Open Liberty is designed with both developers and application business owners in mind.
 
 * It delivers the latest Java APIs and integrates with the most popular Developer and Build tools.
 * It has built-in innovation like zero-migration to reduce application runtime costs and delivery effort.
@@ -75,7 +75,7 @@ These are the objectives in the lab:
         * Configures Liberty for the target application using Liberty configuration snippets
         * Applies security to harden the Liberty configuration
         * Configure logging using configDropins
-        * Review the configuration using LIberty REST APIs
+        * Review the configuration using Liberty REST APIs
         * Monitor Liberty using the Admin Center
     * Tools:
         * Liberty server command to create a Liberty instance and start, stop or dump it
@@ -320,7 +320,7 @@ Now you will use Visual Studio Code to see what has been generated as part of th
 
 The **simpleweb** application will not require the full **Jakarta EE 10** standard but only the servlet specification.
 
-As best practice to optimize the footprint of the application runtime regarding memory and disk space and limit the number of potential vulnerabilities, you should define only the features that are required by the application. In this case, you are ging to replace the **jakartaee-10** feature with an appropriate servlet feature. 
+As best practice to optimize the footprint of the application runtime regarding memory and disk space and limit the number of potential vulnerabilities, you should define only the features that are required by the application. In this case, you are going to replace the **jakartaee-10** feature with an appropriate servlet feature. 
 
 1. In the Visual Studio Code editor for **server.xml**, scroll up to the feature section.
 
@@ -874,7 +874,7 @@ Your configuration should look like this:
 
 ### 6.4.2.2 Use includes for better re-use and visibility
 
-If you configure a Liberty server with resources like datasources or JMS queues, user registry and more, your configureation file can get quite long and not easy to be read and maintained. Liberty allows to specify configuration resources to get included into the server configuration. This helps to keep control over the configuration, provides better reuse of the different configuration and allows to split the responsibility for the configuration between different teams. The developer for example could create the application specific configuration and operations the security configuration.
+If you configure a Liberty server with resources like datasources or JMS queues, user registry and more, your configuration file can get quite long and not easy to be read and maintained. Liberty allows to specify configuration resources to get included into the server configuration. This helps to keep control over the configuration, provides better reuse of the different configuration and allows to split the responsibility for the configuration between different teams. The developer for example could create the application specific configuration and operations the security configuration.
 
 You will now use **includes** to structure the server configuration.
 
@@ -913,7 +913,7 @@ You will now use **includes** to structure the server configuration.
 
     As you can see, you could define the include file as optional, so Liberty would not throw an error if the include file is missing. 
 
-8. Click on **onConflict** to see the available attributes for that options. 
+8. Click on **onConflict** to see the available attributes for that option. 
 
     <kbd>![image100](./images/media/image100.png)</kbd>
 
@@ -943,7 +943,7 @@ You will now use **includes** to structure the server configuration.
 
 Right now, you are not able to access Liberty via HTTPS. While the HTTPS port 9443 has been defined, SSL has not been enabled in Liberty. SSL can be enabled using the transport security feature. So the next step is to enable transport security and take a look at other related topics like keystores.
 
-1. In the file **server.xml**, navigate the to featureManager section.
+1. In the file **server.xml**, navigate to the featureManager section.
 
 2. Add the feature **transportSecurity-1.0** to the **featureManager** section by add the line:
 
@@ -1081,7 +1081,7 @@ Comments:
 
 ### 6.5 Liberty Administration
 
-Now let’s switch to Liberty Admistrator role and explore how to install and configure Liberty from an administrator point of view. 
+Now let’s switch to Liberty Administrator role and explore how to install and configure Liberty from an administrator point of view. 
 
 A traditional administrator typically downloads the application server binaries from the IBM pages and uses a regular editor instead of an IDE like Visual Studio to configure Liberty. To download the latest version of WebSphere Liberty, the administrator can use the IBM support page https://www.ibm.com/support/pages/recommended-updates-websphere-application-server
 
@@ -1546,7 +1546,7 @@ In this case, you want to add/change the log level of the application server.
 
     If a configuration property is specified in both the bootstrap.properties file and the server.xml file, the value in bootstrap.properties is used until the server.xml file is processed. Then, the value in the server.xml file is used. Avoid specifying different values for the same configuration property in both the bootstrap.properties and the server.xml file.
 
-    You will now change the log format to json. As the bootstrap.properties file does not exist, you will simpoly create it.
+    You will now change the log format to json. As the bootstrap.properties file does not exist, you will simply create it.
 
 
 14. Create a bootstrap,properties file that defines the property **com.ibm.ws.logging.console.format** by executing the following command: 
@@ -1737,7 +1737,7 @@ The Liberty **AdminCenter** can be used to monitor the status of the Liberty ser
 
     <kbd>![image176](./images/media/image176.png)</kbd>
 
-14. Click on **Explore**, then select the tab **Applications**. Try to click on the twisty next to the **simpleweb** application and you can see that you are not auithorized to start or stop an application.
+14. Click on **Explore**, then select the tab **Applications**. Try to click on the twisty next to the **simpleweb** application and you can see that you are not authorized to start or stop an application.
 
     <kbd>![image177](./images/media/image177.png)</kbd>
 
@@ -1818,7 +1818,7 @@ Let’s recap what you did in this part of the lab:
 
 ## Summary
 
-In this lab, you learned how to develop a simple application as a developer, how to deployment and configure the application as an configuration opertor, and how to install and configure Liberty as an administrator.
+In this lab, you learned how to develop a simple application as a developer, how to deployment and configure the application as a configuration operator, and how to install and configure Liberty as an administrator.
 
 **Congratulations!**
 
@@ -1826,4 +1826,4 @@ In this lab, you learned how to develop a simple application as a developer, how
 
 # Troubleshooting
 ## Liberty Tools Code Assistant
-If the code assistance via Liberty Tools does not work, make sure that the JAVA_HOME environment variable has been set to a valide value.
+If the code assistance via Liberty Tools does not work, make sure that the JAVA_HOME environment variable has been set to a valid value.
