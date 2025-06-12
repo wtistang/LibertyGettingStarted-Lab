@@ -95,148 +95,54 @@ lab:
 
 
 ## 4. Accessing the environment
+1. Access the lab environment from your web browser.
 
-If you are doing this lab as part of an instructor led workshop (virtual or face to face), an environment has already been provisioned for you. The instructor will provide the details for accessing the lab environment.
-
-Otherwise, you will need to reserve an environment for the lab. You can obtain one here. Follow the on-screen instructions for the “**Reserve now**” option.
-
-<https://TBD-to-the-reservation-link>
-
-The lab environment contains one (1) Linux VM, named Workstation.
-
-<kbd>![](./images/media/workstation.png)</kbd>
-
-
-<br/>
-
-1.  Access the lab environment from your web browser. 
-     
-    A `Published Service` is configured to provide access to the **`Workstation`** VM through the noVNC interface for the lab environment.
-    
-    a. When the demo environment is provisioned, click on the **`environment tile`** to open its details view. 
-
-    b. Click on the **`Published Service`** link which will display a **Directory listing**  
-    
-    c. Click on the **`vnc.html`** link to open the lab environment through the **noVNC** interface. 
-    
-    <kbd>![](./images/media/vnc-link.png)</kbd>
-    
-    d. Click the **`Connect`** button 
-    
-      <kbd>![](./images/media/vnc-connect.png)</kbd>
-
-
-    e. Enter the password as:  **IBMDem0s!**. Then click the **`Send Credentials`** button to access the lab environment. 
-
-
-      <kbd>![](./images/media/vnc-password.png)</kbd>
-
-	 
-	 <br>
-	 
-2.  If prompted to Login to the "workstation" VM, use the credetials below: 
-
-    The login credentials for the **workstation”** VM is:
+    The lab environment page is displayed, the lab environment contains one (1) Linux VMs, with the Graphical User Interface (GUI) for you to access and work in this lab.
  
-     - User ID: **techzone**
+    ![](./images/media/image001.png)
 
-     - Password: **IBMDem0s!**
+2.  Click **Red Hat** icon to access it.
 
-     > Note: That is a numneric zero in the password
+    ![](./images/media/image002.png)
+    
+3.  Click **techzone** user to log in.
 
-	 <br>
+    ![](./images/media/image003.png)
+    
+4. Enter the password as: **IBMDem0s!** and press **Enter**.
+
+    ![](./images/media/image004.png)
+    
+    **Note:** That is a numeric zero in **IBMDem0s!**
+
+    The lab VM GUI is displayed.
+
+    ![](./images/media/image005.png)
+
+
+## 5. Tips for working in the lab environment:
+
+1.  You can use the VM Desktop tools to fit to window or resize the
+    window.
+
+    ![](./images/media/image006.png)
+
+2.  To copy text from the lab guide into the lab
+    environment you have to use the VM Desktop Send Text tool.
+
+    ![](./images/media/image007.png)
  
-     <kbd>![student vm screen](./images/media/techzone-user-pw.png)</kbd>
-	 
-	 <br>
-
-## 5. Tips for working in the lab environment     
-
-1. You can resize the viewable area using the **noVNC Settings** options to resize the virtual desktop to fit your screen.
-
-    a. From the environment VM, click on the **twisty** on the noNC control pane to open the menu.  
-
-    <kbd>![fit to window](./images/media/vnc-twisty.png)</kbd>
-
-    b. To increase the visible area, click on `Settings > Scaling Mode` and set the value to `Remote Resizing`
-      
-     <kbd>![fit to window](./images/media/vnc-remote-resize.png)</kbd>
-
-
-2.  You can copy / paste text from the lab guide into the lab environment using the clipboard in the noVNC viewer. 
-   
-    a. Copy the text from the lab guide that you want to paste into the lab environment
-    
-    b. Click the **`Clipboard`** icon and **`paste`** the text into the noVNC clipboard
-
-    <kbd>![fit to window](./images/media/vnc-paste.png)</kbd>
-    
-    c. Paste the text into the VM, such as to a terminal window, browser window, etc. 
-
-    d. Click on the **`clipboard`** icon again to close the clipboard
-
-   
-3. An alternative to using the noVNC Copy / Paste option, you may consider opening the lab guide in a web browser inside of the VM. Using this method, you can easily copy / paste text from the lab guide without having to use the noVNC clipboard. 
-
-4. To switch between different windows or get access the tool bar, click on the **`Activities`** icon within the VM.
-
-    <kbd>![fit to window](./images/media/Activities.png)</kbd>
-
-    Then select from the tool bar the application that you want to open. In the lab, you will use Firefox and the terminal.
-
-    <kbd>![Toolbar](./images/media/Toolbar.png)</kbd>
-    
-
-
-5. How to change the background color 
-In the environment, the default background for terminal windows and Visual Studio Code is dark. For the lab documentation, we changed the color to light. Feel free to keep the background in light but if you want to change it to dark, here the explanation how it was changed.
-
-    1. How to change the terminal background to white
-        Right-click into the terminal background, then select Preferences.
-
-        <kbd>![Terminal-change-background1](./images/media/Terminal-change-background1.png)</kbd>
-
-        A Preferences window opens. Click on Colors, then uncheck the box for  Use colors from system theme . (If you want to get back to dark, check the box again).
-
-        <kbd>![Terminal-change-background2](./images/media/Terminal-change-background2.png)</kbd>
-
-        The terminal background should switch to white.
-
-        <kbd>![Terminal-change-background3](./images/media/Terminal-change-background3.png)</kbd>
-
-        Close the Preferences window.
-
-
-
-    2. How to switch the background of Visual Studio Code from dark to light
-
-        In a terminal Window, run the following command to start Visual Studio Code
-
-            mkdir ~/temp
-            code ~/temp
-
-        <kbd>![start-VSCode](./images/media/start-VSCode.png)</kbd>
-
-        Visual Studio Code opens with a dark background. 
-        Click on  Yes, I trust the authors 
-
-        <kbd>![VSCode-trust](./images/media/VSCode-trust.png)</kbd>
-
-        Then select Preferences > Theme > Color Theme
-
-        <kbd>![VSCode-Theme](./images/media/VSCode-Theme.png)</kbd>
-
-        Select Light
-
-        <kbd>![VSCode-Theme-light](./images/media/VSCode-Theme-light.png)</kbd>
-
-        The tool will change to a light background, see below.
-
-        <kbd>![VSCode-light](./images/media/VSCode-light.png)</kbd>
-
-        Close Visual Studio Code.
-
-<br>    
+    a. Copy the text from the lab guide that you want to paste into the lab environment.
+ 
+    b. Open a terminal window, or a text editor or a web browser in the VM Desktop where you want to copy the text to.
+ 
+    c. Click the **Send Text** icon in the VM Desktop tool bar, paste the text into its window, then again click **Send Text** to send the text to the VM Desktop environment and close its window.
+ 
+    ![](./images/media/image008.png)
+ 
+    The text is now copied to the terminal window, or the text editor or the web browser you opened in the previous step.
+ 
+    ![](./images/media/image009.png)    
 
 
 ## 6. Execute Lab Tasks
