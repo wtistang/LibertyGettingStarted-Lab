@@ -1,3 +1,4 @@
+![](./images/media/2643-header.png)
 # Liberty Getting Started
 
 ## data collection, assessments, & deployment accelerators
