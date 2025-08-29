@@ -577,6 +577,27 @@ You acted as developer and used Visual Studio Code and the Liberty Tools for the
 
 Useful links: https://github.com/OpenLiberty/liberty-tools-vscode/blob/HEAD/docs/user-guide.md 
 
+### 6.3.9 Troubleshooting
+
+You will need the server package for the Liberty Operations part of the lab. If you did not build the server package successfully, perform the following steps to be able to continue with the next part.
+
+If not already done, create the required working directories
+
+	 mkdir ~/Student
+	 mkdir ~/Student/dev
+	 mkdir ~/Student/ops
+	 mkdir ~/Student/assets
+
+Create a backup directory and clone the repository
+
+	 mkdir ~/Student/backup
+	 git clone https://github.com/LarsBesselmann/LibertyGettingStarted-Lab /home/techzone/Student/backup
+
+Copy the server package to the assets directory
+
+	 cp ~/Student/backup/assets/simpleweb-serverpackage.jar ~/Student/assets
+
+
 ### 6.4 Liberty Operations 
 
 Now you will work with Liberty from an operational point of view. Development has handed over a Liberty server package to you. The server package contains all necessary configuration to run the application called **simpleweb**. The provided server package is typically not production-ready, as it is likely not portable between stages and does not fulfill the requirements regarding security and so on. 
@@ -1065,7 +1086,7 @@ You will re-use the generated configuration snippets and other assets in the nex
 3. If not already done, exit **Visual Studio Code** and stop any running Liberty instance.
 
 
-### 6.4.2.5 Recap
+### 6.4.3 Recap
 
 In this section of the lab, you got an impression how to create and use configuration snippets:
 
@@ -1079,6 +1100,35 @@ Comments:
 
 * Instead of using the Liberty Tools configuration assistant in Visual Studio Code, you could also use the product documentation and copy & paste to create Liberty configuration snippets. 
 * You could also use the IBM migration tools to transform an existing configuration for WebSphere Traditional and other runtimes into a Liberty configuration.
+
+### 6.4.4 Troubleshooting
+
+You will need the some of the created artifacts like configuration snippets for the Liberty Administration part of the lab. If you did not complete this part of the lab successfully, perform the following steps to be able to continue with the next part.
+
+If not already done, create the required working directories
+
+	 mkdir ~/Student
+	 mkdir ~/Student/dev
+	 mkdir ~/Student/ops
+	 mkdir ~/Student/assets
+ 
+If not already done, create a backup directory and clone the repository
+
+	mkdir ~/Student/backup
+	git clone https://github.com/LarsBesselmann/LibertyGettingStarted-Lab /home/techzone/Student/backup
+
+If not already done, copy the server package to the assets directory
+
+	cp ~/Student/backup/assets/simpleweb-serverpackage.jar ~/Student/assets
+
+Copy the created artifacts to the assets directory
+
+	cp ~/Student/backup/assets/server.* ~/Student/assets
+	
+	cp ~/Student/backup/assets/application-config.xml ~/Student/assets
+	
+	cp ~/Student/backup/assets/simpleweb.war ~/Student/assets
+
 
 ### 6.5 Liberty Administration
 
