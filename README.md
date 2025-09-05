@@ -289,16 +289,16 @@ Now you will use Visual Studio Code to see what has been generated as part of th
     
     In the build section, you can find the configuration of the liberty-maven-plugin.
     <kbd>![image027](./images/media/image027.png)</kbd>
-<table>
-<tbody>
-<tr class="odd">
-<td><kbd><img src="./images/media/info.png" alt="sign-info" /></kbd></td>
-<td>
-<p>Don’t worry if the version of the plugin has changed to 3.10.2 or later.
-</p></td>
-</tr>
-</tbody>
-</table>
+	<table>
+	<tbody>
+	<tr class="odd">
+	<td><kbd><img src="./images/media/info.png" alt="sign-info" /></kbd></td>
+	<td>
+	<p>Don’t worry if the version of the plugin has changed to 3.10.2 or later.
+	</p></td>
+	</tr>
+	</tbody>
+	</table>
 
     b. Finally close the pom.xml.
 
